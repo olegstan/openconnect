@@ -1,19 +1,47 @@
-var nexpect = require('nexpect');
+import { spawn } from 'child_process';
 
 let login, password, code;
 
 process.argv.slice(2).forEach(function (val, index, array) {
-  let parts = val.toString().split(' ');
+  let value = val.toString();
 
-  login = parts[0];
-  password = parts[1];
-  code = parts[2];
+  switch (index)
+  {
+    case 0:
+      login = value;
+      break;
+    case 1:
+      password = value;
+      break;
+    case 2:
+      code = value;
+      break;
+  }
 });
 
+const openconnect = spawn('openconnect', [
+  'sslvpn.aton.ru',
+  '--background',
+  '--user=' + login,
+  '--authgroup=VPN_CRMUSER_2FA'
+]);
 
-nexpect.expect("openconnect --user=" + username + " --background sslvpn.aton.ru --authgroup=VPN_CRMUSER_2FA")
-  .run(function (err, stdout, exitcode) {
-    if (!err) {
-      console.log("hello was echoed");
-    }
-  });
+openconnect.stdout.on('data', (data) => {
+  console.log(`stdout: ${data}`);
+});
+
+openconnect.stderr.on('data', (data) => {
+  console.error(`stderr: ${data}`);
+
+  // Проверяем, запрашивается ли пароль
+  if (data.includes('Password:')) {
+    // Отправляем пароль вводом в stdin
+    openconnect.stdin.write(password + '\n');
+  }else if(data.includes('OTP')){
+    openconnect.stdin.write(code + '\n');
+  }
+});
+
+openconnect.on('close', (code) => {
+  console.log(`Child process exited with code ${code}`);
+});
