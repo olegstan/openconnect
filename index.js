@@ -24,9 +24,10 @@ process.argv.slice(2).forEach(function (val, index, array) {
 
 
 var __dirname = fs.realpathSync('.');
-var code = execSync('node ' + __dirname + '/../2fa/src/index.js ', [login]);
+var code = execSync('node ' + __dirname + '/../2fa/src/index.js ' + login);
 
 console.log(code)
+console.log('node ' + __dirname + '/../2fa/src/index.js ')
 if(code.length === 6)
 {
   connect(code)
