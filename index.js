@@ -24,7 +24,7 @@ process.argv.slice(2).forEach(function (val, index, array) {
 
 
 var __dirname = fs.realpathSync('.');
-var code = execSync('node ' + __dirname + '/../2fa/src/index.js ' + login, {'encoding': 'UTF-8'});
+var code = execSync('node ' + __dirname + '/../2fa/src/index.js ' + login, {'encoding': 'UTF-8'}).trim();
 
 console.log(code)
 console.log(code.length)
