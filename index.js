@@ -1,4 +1,4 @@
-import { spawn, fork } from 'child_process';
+import { spawn, execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 
@@ -24,7 +24,13 @@ process.argv.slice(2).forEach(function (val, index, array) {
 
 
 var __dirname = fs.realpathSync('.');
-var process2fa = fork(__dirname + '/../2fa/src/index.js ', [login]);
+var code = execSync('node ' + __dirname + '/../2fa/src/index.js ', [login]);
+
+console.log(code)
+if(code.length === 6)
+{
+  connect(code)
+}
 
 var connect = function (code)
 {
@@ -57,16 +63,4 @@ var connect = function (code)
     console.log(`Child process exited with code ${code}`);
   });
 }
-
-// listen for errors as they may prevent the exit event from firing
-process2fa.on('message', function(message) {
-  console.log(message);
-
-  if(message.length === 6)
-  {
-    connect(message)
-  }
-});
-
-
 
