@@ -4,6 +4,12 @@ import path from 'path';
 
 let login, password, group = 'CRM';
 
+var getCode = function ()
+{
+  var __dirname = fs.realpathSync('.');
+  return execSync('node ' + __dirname + '/../2fa/src/index.js ' + login, {'encoding': 'UTF-8'}).trim();
+}
+
 var connect = function (code)
 {
   const openconnect = spawn('openconnect', [
@@ -14,12 +20,10 @@ var connect = function (code)
   ]);
 
   openconnect.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
+    // console.log(`stdout: ${data}`);
   });
 
   openconnect.stderr.on('data', (data) => {
-    console.error(`stderr: ${data}`);
-
     // Проверяем, запрашивается ли пароль
     if (data.includes('Password:')) {
       // Отправляем пароль вводом в stdin
@@ -27,12 +31,12 @@ var connect = function (code)
     }else if(data.includes('OTP')){
       openconnect.stdin.write(code + '\n');
     }else if(data.includes('Connected as')){
-
+      return true;
     }
   });
 
   openconnect.on('close', (code) => {
-    console.log(`Child process exited with code ${code}`);
+    // console.log(`Child process exited with code ${code}`);
   });
 }
 
@@ -56,13 +60,23 @@ process.argv.slice(2).forEach(function (val, index, array) {
 
 
 
-var __dirname = fs.realpathSync('.');
-var code = execSync('node ' + __dirname + '/../2fa/src/index.js ' + login, {'encoding': 'UTF-8'}).trim();
 
-console.log(code)
-console.log(code.length)
+
+// console.log(code)
+// console.log(code.length)
+let code = getCode();
 
 if(code.length === 6)
 {
-  connect(code)
+  let result = connect(code);
+
+  if(result !== true)
+  {
+    let code = getCode();
+
+    if(code.length === 6)
+    {
+      result = connect(code);
+    }
+  }
 }
