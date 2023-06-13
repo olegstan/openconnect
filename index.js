@@ -24,10 +24,10 @@ process.argv.slice(2).forEach(function (val, index, array) {
 
 
 var __dirname = fs.realpathSync('.');
-var process = fork('node ' + __dirname + '/../2fa/src/index.js ' + login);
+var process2fa = fork('node ' + __dirname + '/../2fa/src/index.js ' + login);
 
 var connect = function (code)
-{
+{ls -l
   const openconnect = spawn('openconnect', [
     'sslvpn.aton.ru',
     '--background',
@@ -59,7 +59,7 @@ var connect = function (code)
 }
 
 // listen for errors as they may prevent the exit event from firing
-process.on('message', function(message) {
+process2fa.on('message', function(message) {
   console.log(message);
 
   if(message.length === 6)
