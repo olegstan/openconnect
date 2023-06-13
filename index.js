@@ -4,36 +4,6 @@ import path from 'path';
 
 let login, password, group = 'CRM';
 
-process.argv.slice(2).forEach(function (val, index, array) {
-  let value = val.toString();
-
-  switch (index)
-  {
-    case 0:
-      login = value;
-      break;
-    case 1:
-      password = value;
-      break;
-    case 2:
-      group = value;
-      break;
-  }
-});
-
-
-
-var __dirname = fs.realpathSync('.');
-var code = execSync('node ' + __dirname + '/../2fa/src/index.js ' + login, {'encoding': 'UTF-8'}).trim();
-
-console.log(code)
-console.log(code.length)
-
-if(code.length === 6)
-{
-  connect(code)
-}
-
 var connect = function (code)
 {
   const openconnect = spawn('openconnect', [
@@ -66,3 +36,33 @@ var connect = function (code)
   });
 }
 
+
+process.argv.slice(2).forEach(function (val, index, array) {
+  let value = val.toString();
+
+  switch (index)
+  {
+    case 0:
+      login = value;
+      break;
+    case 1:
+      password = value;
+      break;
+    case 2:
+      group = value;
+      break;
+  }
+});
+
+
+
+var __dirname = fs.realpathSync('.');
+var code = execSync('node ' + __dirname + '/../2fa/src/index.js ' + login, {'encoding': 'UTF-8'}).trim();
+
+console.log(code)
+console.log(code.length)
+
+if(code.length === 6)
+{
+  connect(code)
+}
