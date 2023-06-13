@@ -24,10 +24,10 @@ process.argv.slice(2).forEach(function (val, index, array) {
 
 
 var __dirname = fs.realpathSync('.');
-var process2fa = fork('node ' + __dirname + '/../2fa/src/index.js ' + login);
+var process2fa = fork(__dirname + '/../2fa/src/index.js ', [login]);
 
 var connect = function (code)
-{ls -l
+{
   const openconnect = spawn('openconnect', [
     'sslvpn.aton.ru',
     '--background',
