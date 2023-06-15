@@ -7,7 +7,7 @@ let login, password, group = 'CRM', imgPath;
 var getCode = function ()
 {
   var __dirname = fs.realpathSync('.');
-  return execSync('node ' + __dirname + '/../2fa/src/index.js ' + imgPath, {'encoding': 'UTF-8'}).trim();
+  return execSync('node ' + __dirname + '/../2fa/src/index.js ' + login, {'encoding': 'UTF-8'}).trim();
 }
 
 var connect = function (code = '')
