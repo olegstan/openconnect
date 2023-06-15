@@ -31,7 +31,7 @@ var connect = function (code = '')
     }else if(data.includes('OTP')){
       openconnect.stdin.write(code + '\n');
     }else if(data.includes('Connected as')){
-      return true;
+      openconnect.unref();
     }
   });
 
@@ -71,17 +71,7 @@ if(group === 'VPN_CRMUSER_2FA')
 
   if(code.length === 6)
   {
-    let result = connect(code);
-
-    if(result !== true)
-    {
-      let code = getCode();
-
-      if(code.length === 6)
-      {
-        result = connect(code);
-      }
-    }
+    connect(code);
   }
 }else{
   connect()
