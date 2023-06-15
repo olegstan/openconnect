@@ -10,7 +10,7 @@ var getCode = function ()
   return execSync('node ' + __dirname + '/../2fa/src/index.js ' + imgPath, {'encoding': 'UTF-8'}).trim();
 }
 
-var connect = function (code)
+var connect = function (code = '')
 {
   const openconnect = spawn('openconnect', [
     'sslvpn.aton.ru',
@@ -64,19 +64,27 @@ process.argv.slice(2).forEach(function (val, index, array) {
 
 // console.log(code)
 // console.log(code.length)
-let code = getCode();
 
-if(code.length === 6)
+if(group === 'VPN_CRMUSER_2FA')
 {
-  let result = connect(code);
+  let code = getCode();
 
-  if(result !== true)
+  if(code.length === 6)
   {
-    let code = getCode();
+    let result = connect(code);
 
-    if(code.length === 6)
+    if(result !== true)
     {
-      result = connect(code);
+      let code = getCode();
+
+      if(code.length === 6)
+      {
+        result = connect(code);
+      }
     }
   }
+}else{
+  connect()
 }
+
+
