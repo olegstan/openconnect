@@ -4,13 +4,13 @@ import path from 'path';
 
 let login, password, group = 'CRM', imgPath;
 
-var getCode = function ()
+export const getCode = function ()
 {
   var __dirname = fs.realpathSync('.');
-  return execSync('node ' + __dirname + '/../2fa/src/index.js ' + login, {'encoding': 'UTF-8'}).trim();
+  return execSync('node ' + __dirname + '/../2fa/src/index.js ' + imgPath, {'encoding': 'UTF-8'}).trim();
 }
 
-var connect = function (code = '')
+export const connect = function (code = '')
 {
   const openconnect = spawn('openconnect', [
     'sslvpn.aton.ru',
@@ -54,6 +54,9 @@ process.argv.slice(2).forEach(function (val, index, array) {
       break;
     case 2:
       group = value;
+      break;
+    case 3:
+      imgPath = value;
       break;
   }
 });
