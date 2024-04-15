@@ -7,7 +7,7 @@ let login, password, group = 'CRM', imgPath;
 export const getCode = function ()
 {
   var __dirname = fs.realpathSync('.');
-  return execSync('node ' + __dirname + '/../2fa/src/index.js ' + imgPath, {'encoding': 'UTF-8'}).trim();
+  return execSync('node /var/www/2fa/src/index.js ' + imgPath, {'encoding': 'UTF-8'}).trim();
 }
 
 export const connect = function (code = '')
