@@ -29,5 +29,5 @@ process.argv.slice(2).forEach(function (val, index, array) {
 // console.log(code)
 // console.log(code.length)
 
-console.log(getCode());
+console.log(getCode(imgPath));
 

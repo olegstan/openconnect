@@ -1,13 +1,10 @@
 import { spawn, execSync } from 'child_process';
-import fs from 'fs';
-import path from 'path';
 
 let login, password, group = 'CRM', imgPath;
 
-export const getCode = function ()
+export const getCode = function (path)
 {
-  var __dirname = fs.realpathSync('.');
-  return execSync('node /var/www/2fa/src/index.js ' + imgPath, {'encoding': 'UTF-8'}).trim();
+  return execSync('node /var/www/2fa/src/index.js ' + path, {'encoding': 'UTF-8'}).trim();
 }
 
 export const connect = function (code = '')
@@ -70,7 +67,7 @@ process.argv.slice(2).forEach(function (val, index, array) {
 
 if(group === 'VPN_CRMUSER_2FA')
 {
-  let code = getCode();
+  let code = getCode(imgPath);
 
   if(code.length === 6)
   {
