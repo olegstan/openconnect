@@ -1,4 +1,4 @@
-import {getCode} from "index";
+import {getCode} from "./index";
 
 let login, password, group = 'CRM', imgPath;
 
