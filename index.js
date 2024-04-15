@@ -1,6 +1,7 @@
 import { spawn, execSync } from 'child_process';
 
 let login, password, group = 'CRM', imgPath;
+let debug = true;
 
 export const getCode = function (path)
 {
@@ -17,10 +18,18 @@ export const connect = function (code = '')
   ]);
 
   openconnect.stdout.on('data', (data) => {
-    // console.log(`stdout: ${data}`);
+    if(debug)
+    {
+      console.log(`stdout: ${data}`);
+    }
   });
 
   openconnect.stderr.on('data', (data) => {
+    if(debug)
+    {
+      console.log(`stderr: ${data}`);
+    }
+
     // Проверяем, запрашивается ли пароль
     if (data.includes('Password:')) {
       // Отправляем пароль вводом в stdin
@@ -33,7 +42,10 @@ export const connect = function (code = '')
   });
 
   openconnect.on('close', (code) => {
-    // console.log(`Child process exited with code ${code}`);
+    if(debug)
+    {
+      console.log(`Child process exited with code ${code}`);
+    }
   });
 }
 
