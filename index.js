@@ -1,20 +1,14 @@
 import { spawn, execSync } from 'child_process';
 
-let login, password, group = 'CRM', imgPath;
+let login, password;
 let debug = true;
-
-export const getCode = function (path)
-{
-  return execSync('node /var/www/2fa/src/index.js ' + path, {'encoding': 'UTF-8'}).trim();
-}
 
 export const connect = function (code = '')
 {
   const openconnect = spawn('openconnect', [
-    'sslvpn.aton.ru',
+    'xz-atlanta-s1.socksprotect.com',
     '--background',
-    '--user=' + login,
-    '--authgroup=' + group//VPN_CRMUSER_2FA or CRM
+    '--user=' + login
   ]);
 
   openconnect.stdout.on('data', (data) => {
@@ -34,9 +28,7 @@ export const connect = function (code = '')
     if (data.includes('Password:')) {
       // Отправляем пароль вводом в stdin
       openconnect.stdin.write(password + '\n');
-    }else if(data.includes('OTP')){
-      openconnect.stdin.write(code + '\n');
-    }else if(data.includes('Connected as')){
+    } else if(data.includes('Connected as')){
       openconnect.unref();
     }
   });
@@ -61,32 +53,10 @@ process.argv.slice(2).forEach(function (val, index, array) {
     case 1:
       password = value;
       break;
-    case 2:
-      group = value;
-      break;
-    case 3:
-      imgPath = value;
-      break;
   }
 });
 
+connect()
 
-
-
-
-// console.log(code)
-// console.log(code.length)
-
-if(group === 'VPN_CRMUSER_2FA')
-{
-  let code = getCode(imgPath);
-
-  if(code.length === 6)
-  {
-    connect(code);
-  }
-}else{
-  connect()
-}
 
 
