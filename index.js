@@ -6,7 +6,7 @@ let debug = true;
 export const connect = function (code = '')
 {
   const openconnect = spawn('openconnect', [
-    'xz-atlanta-s1.socksprotect.com',
+    'oc-test02.socksprotect.com',
     '--background',
     '--user=' + login
   ]);
